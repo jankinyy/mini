@@ -1,6 +1,6 @@
 <template>
   <!-- 导航条 -->
-  <view class="navbar">
+  <view class="navbar" :style="{ paddingTop: safeArea.top + 'px' }">
     <!-- 文字logo -->
     <view class="logo">
       <image
@@ -17,7 +17,12 @@
 </template>
 
 <script>
-export default {};
+import { mapState } from "vuex";
+export default {
+  computed: {
+    ...mapState(["safeArea"]),
+  },
+};
 </script>
 
 <style lang="scss">

@@ -5,7 +5,9 @@ Vue.use(Vuex);
 
 const store = new Vuex.Store({
   plugins: [persistence()],
-  state: {},
+  state: {
+    safeArea: uni.getSystemInfoSync().safeArea,
+  },
   mutations: {},
   actions: {},
 });
