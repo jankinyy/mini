@@ -4,7 +4,7 @@ const interceptor = {
     uni.showLoading({
       title: "加载中",
     });
-    if (!args.url.startWith("http")) {
+    if (!args.url.startsWith("http")) {
       args.url = baseUrl + args.url;
     }
     args.header = {
