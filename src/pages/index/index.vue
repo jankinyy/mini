@@ -1,7 +1,7 @@
 <template>
-  <view>
+  <view class="content">
     <Navbar />
-    <scroll-view scroll-y>
+    <scroll-view scroll-y class="main">
       <Carousel :banners="banners" height="200px" />
       <CateScroll :category="category" />
       <!--  热门推荐 -->

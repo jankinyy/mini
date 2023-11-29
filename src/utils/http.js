@@ -26,7 +26,7 @@ const http = async (option) => {
     return res.data;
   }
   if (res.statusCode === 401) {
-    uni.navigateTo({ url: "/src/pages/login" });
+    uni.navigateTo({ url: "/src/pages/login/index.vue" });
     return;
   }
 };
