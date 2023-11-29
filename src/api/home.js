@@ -21,3 +21,16 @@ export const getHotsAPI = () => {
     url: "/home/hot/mutli",
   });
 };
+
+// 1. 封装API
+export const getLikesAPI = (page = 1, pageSize = 10) => {
+  return request({
+    url: "/home/goods/guessLike",
+    data: { page, pageSize },
+  });
+};
+
+// 1. 封装API
+export const getRecomendsAPI = (url) => {
+  return request({ url });
+};

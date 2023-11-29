@@ -1,7 +1,14 @@
 <template>
   <view class="content">
     <Navbar />
-    <scroll-view scroll-y class="main">
+    <scroll-view
+      scroll-y
+      class="main"
+      @scrolltolower="loadMore"
+      refresher-enabled
+      :refresher-triggered="refresing"
+      @refresherrefresh="onRefresger"
+    >
       <Carousel :banners="banners" height="200px" />
       <CateScroll :category="category" />
       <!--  热门推荐 -->
@@ -24,12 +31,18 @@
           </navigator>
         </view>
       </view>
+      <Guess :list="likes" />
     </scroll-view>
   </view>
 </template>
 <script>
 import Navbar from "./components/Navbar.vue";
-import { getBannersAPI, getCategoryAPI, getHotsAPI } from "@/api/home";
+import {
+  getBannersAPI,
+  getCategoryAPI,
+  getHotsAPI,
+  getLikesAPI,
+} from "@/api/home";
 export default {
   components: { Navbar },
   data() {
@@ -37,12 +50,18 @@ export default {
       banners: [],
       category: [],
       hots: [],
+      likes: [],
+      page: 1,
+      loading: false,
+      totalPage: 0,
+      refresing: false,
     };
   },
   onLoad() {
     this.getBanners();
     this.getCategory();
     this.getHots();
+    this.getLikes();
   },
   methods: {
     async getBanners() {
@@ -59,6 +78,50 @@ export default {
       const { result } = await getHotsAPI();
       this.hots = result;
       console.log(this.hots, "人气推荐");
+    },
+    async getLikes() {
+      this.loading = true;
+      const { result } = await getLikesAPI(this.page);
+      const { items, pages } = result;
+      this.totalPage = 3;
+      this.likes = [...this.likes, ...items];
+      console.log(result, "猜你喜欢");
+      this.page++;
+      this.loading = false;
+    },
+    loadMore() {
+      if (this.loading) return;
+      if (this.page > this.totalPage) {
+        uni.showToast({
+          title: "到底啦",
+          icon: "error",
+        });
+        return;
+      }
+
+      console.log("触底了");
+      this.getLikes();
+    },
+    async onRefresger() {
+      console.log("刷新啦");
+      this.refresing = true;
+
+      this.banners = [];
+      this.category = [];
+      this.hots = [];
+      this.likes = [];
+      this.page = 1;
+      this.loading = false;
+      this.totalPage = 0;
+
+      await Promise.all([
+        this.getBanners(),
+        this.getCategory(),
+        this.getHots(),
+        this.getLikes(),
+      ]).then(() => {
+        this.refresing = false;
+      });
     },
   },
 };
