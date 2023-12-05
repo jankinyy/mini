@@ -1,3 +1,4 @@
+import store from "@/store";
 const baseUrl = "https://pcapi-xiaotuxian-front-devtest.itheima.net";
 const interceptor = {
   invoke(args) {
@@ -11,6 +12,10 @@ const interceptor = {
       ...args.header,
       "source-client": "miniapp",
     };
+    //如果有token，默认放到请求头中
+    if (store.state.user.profile) {
+      args.header.Authorization = store.state.user.profile.token;
+    }
   },
   complete(res) {
     uni.hideLoading();
@@ -26,7 +31,7 @@ const http = async (option) => {
     return res.data;
   }
   if (res.statusCode === 401) {
-    uni.navigateTo({ url: "/src/pages/login/index.vue" });
+    uni.navigateTo({ url: "/pages/login/index" });
     return;
   }
 };
