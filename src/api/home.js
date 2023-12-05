@@ -30,7 +30,7 @@ export const getLikesAPI = (page = 1, pageSize = 10) => {
   });
 };
 
-// 1. 封装API
+// 获取推荐商品
 export const getRecomendsAPI = (url) => {
   return request({ url });
 };
