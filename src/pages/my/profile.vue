@@ -45,13 +45,18 @@
         </view>
         <view class="form-item">
           <text class="label">出生日期</text>
-          <picker mode="date" start="1900-01-01" end="2022-01-01">
+          <picker
+            mode="date"
+            start="1900-01-01"
+            :end="end"
+            @change="birthDayChange"
+          >
             <view>{{ profile.birthday || "请选择日期" }}</view>
           </picker>
         </view>
         <view class="form-item">
           <text class="label">城市</text>
-          <picker mode="region">
+          <picker mode="region" @change="regionChange">
             <view>{{ profile.fullLocation || "请选择城市" }}</view>
           </picker>
         </view>
@@ -69,6 +74,7 @@
 <script>
 import { mapState } from "vuex";
 import { getProfileAPI, uploadPhotoAPI, updateProfileAPI } from "@/api/profile";
+import dayjs from "dayjs";
 export default {
   computed: {
     ...mapState(["safeArea"]),
@@ -76,6 +82,7 @@ export default {
   data() {
     return {
       profile: {},
+      end: dayjs().format("YYYY-MM-DD"),
     };
   },
   onLoad() {
@@ -113,6 +120,20 @@ export default {
       setTimeout(() => {
         uni.navigateBack();
       }, 3000);
+    },
+    birthDayChange(e) {
+      console.log(e.detail, "生日数据");
+      this.profile.birthday = e.detail.value;
+    },
+    regionChange(e) {
+      console.log(e.detail, "地区数据");
+      const { value, code } = e.detail;
+
+      this.profile.fullLocation = value.join(" ");
+      console.log(this.profile.fullLocation, "拼接");
+      this.profile.provinceCode = code[0];
+      this.profile.cityCode = code[1];
+      this.profile.countyCode = code[2];
     },
   },
 };
