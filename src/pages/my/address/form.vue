@@ -45,7 +45,7 @@
       </view>
     </view>
     <!-- 提交按钮 -->
-    <view class="button" @click="submit"> 保 存 </view>
+    <view class="button" @tap="onSubmitForm"> 保 存 </view>
   </view>
 </template>
 <script>
@@ -73,9 +73,7 @@ export default {
       },
     };
   },
-  onShow() {
-    this.submit();
-  },
+
   methods: {
     onChangeDefault(e) {
       this.form.isDefault = e.detail.value ? 1 : 0;
@@ -87,7 +85,7 @@ export default {
       this.form.cityCode = code[1];
       this.form.countyCode = code[2];
     },
-    async submit() {
+    async onSubmitForm() {
       await addAddressAPI(this.form);
       uni.showToast({
         title: "保存成功",

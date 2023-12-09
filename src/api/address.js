@@ -13,3 +13,13 @@ export const addAddressAPI = (data) => {
     data,
   });
 };
+
+/**
+ * 删除收货地址
+ */
+export const delAddressAPI = (id) => {
+  return request({
+    url: `/member/address/${id}`,
+    method: "delete",
+  });
+};

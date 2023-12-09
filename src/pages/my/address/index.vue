@@ -28,7 +28,9 @@
             </view>
             <template v-slot:right>
               <view class="swipe-cell-action">
-                <button class="delete-button">删除</button>
+                <button class="delete-button" @click="onDelete(item.id)">
+                  删除
+                </button>
               </view>
             </template>
           </uni-swipe-action-item>
@@ -42,14 +44,14 @@
   </view>
 </template>
 <script>
-import { getAddressAPI } from "@/api/address";
+import { getAddressAPI, delAddressAPI } from "@/api/address";
 export default {
   data() {
     return {
       list: [],
     };
   },
-  onLoad() {
+  onShow() {
     this.getAddress();
   },
   methods: {
@@ -57,6 +59,23 @@ export default {
       const { result } = await getAddressAPI();
       this.list = result;
       console.log(this.list, "地址");
+    },
+    async onDelete(id) {
+      const { confirm } = await uni.showModal({
+        title: "提示",
+        content: "确认删除吗？",
+      });
+
+      if (confirm) {
+        await delAddressAPI(id);
+        uni.showToast({
+          title: "删除成功",
+          icon: "success",
+        });
+        this.list = this.list.filter((item) => {
+          return item.id !== id;
+        });
+      }
     },
   },
 };
